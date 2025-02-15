@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Details - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/students" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/classes">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance">
+                <i class="fa fa-calendar-check"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/results">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/reports">
+                <i class="fa fa-file-alt"></i> Reports
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/settings">
+                <i class="fa fa-cog"></i> Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Student Details</h1>
+        </div>
+        <!-- Display Student Information -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= student.firstName %> <%= student.lastName %></h5>
+            <p class="card-text">
+              <strong>Student ID:</strong> <%= student.studentId %><br>
+              <strong>Email:</strong> <%= student.email %><br>
+              <strong>Phone:</strong> <%= student.phone || 'Not provided' %><br>
+              <strong>Address:</strong> <%= student.address || 'Not provided' %><br>
+              <strong>Batch:</strong> <%= student.batch %><br>
+              <strong>Department:</strong> <%= student.department %><br>
+              <strong>Semester:</strong> <%= student.semester %><br>
+              <strong>GPA:</strong> <%= student.gpa || 'N/A' %><br>
+              <strong>Absents:</strong> <%= student.absents || 0 %><br>
+            </p>
+          </div>
+        </div>
+        <!-- Enrolled Classes -->
+        <div class="mt-4">
+          <h3>Enrolled Classes</h3>
+          <% if (student.enrolledClasses && student.enrolledClasses.length > 0) { %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Class Name</th>
+                  <th>Instructor</th>
+                  <th>Schedule</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% student.enrolledClasses.forEach(cls => { %>
+                  <tr>
+                    <td><%= cls.className %></td>
+                    <td><%= cls.teacher || 'Not assigned' %></td>
+                    <td>
+                      <% if (cls.schedule && cls.schedule.length > 0) { %>
+                        <% cls.schedule.forEach(slot => { %>
+                          <%= slot.day %>, <%= slot.startTime %> - <%= slot.endTime %><br>
+                        <% }); %>
+                      <% } else { %>
+                        No schedule available
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p>No classes enrolled yet.</p>
+          <% } %>
+        </div>
+        <!-- Attendance Records -->
+        <div class="mt-4">
+          <h3>Attendance Records</h3>
+          <% if (student.attendanceRecords && student.attendanceRecords.length > 0) { %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Class Name</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% student.attendanceRecords.forEach(record => { %>
+                  <tr>
+                    <td><%= record.class?.className || 'N/A' %></td>
+                    <td><%= record.date.toDateString() %></td>
+                    <td><%= record.status %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p>No attendance records found.</p>
+          <% } %>
+        </div>
+        <!-- Exam Results -->
+        <div class="mt-4">
+          <h3>Exam Results</h3>
+          <% if (student.results && student.results.length > 0) { %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Marks</th>
+                  <th>Grade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% student.results.forEach(result => { %>
+                  <tr>
+                    <td><%= result.class?.className || 'N/A' %></td>
+                    <td><%= result.marks %></td>
+                    <td><%= result.grade %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p>No results available yet.</p>
+          <% } %>
+        </div>
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

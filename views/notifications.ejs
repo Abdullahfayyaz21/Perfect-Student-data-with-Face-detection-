@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notifications - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/students">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/notifications" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-bell"></i> Notifications
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Notifications</h1>
+        </div>
+
+        <!-- NOTIFICATIONS TABLE -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Message</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (notifications.length > 0) { %>
+              <% notifications.forEach(notification => { %>
+                <tr class="<%= notification.isRead ? '' : 'font-weight-bold' %>">
+                  <td><%= notification.message %></td>
+                  <td><%= notification.createdAt.toLocaleDateString() %></td>
+                  <td><%= notification.isRead ? 'Read' : 'Unread' %></td>
+                  <td>
+                    <form action="/admin/notifications/<%= notification._id %>/mark-read" method="POST" style="display: inline;">
+                      <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
+                    </form>
+                    <form action="/admin/notifications/<%= notification._id %>/delete" method="POST" style="display: inline;">
+                      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="4" class="text-center">No notifications found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

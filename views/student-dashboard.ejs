@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom Styles for Dark Theme -->
+  <style>
+    body {
+      background-color: #121212; /* Dark background */
+      color: #ffffff; /* White text */
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #1e1e1e; /* Slightly lighter dark background */
+      border-bottom: 1px solid #333;
+    }
+    .navbar-brand img {
+      width: 40px; /* Adjust logo size */
+      height: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #ffffff !important; /* White text */
+    }
+    .navbar-nav .nav-link:hover {
+      color: #00bcd4 !important; /* Cyan accent on hover */
+    }
+    .dashboard-container {
+      background-color: #1e1e1e; /* Dark container background */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle glow effect */
+      margin: 20px auto;
+      max-width: 1200px;
+    }
+    h2, h3 {
+      color: #00bcd4; /* Cyan accent color */
+    }
+    .profile {
+      background-color: #2c2c2c; /* Slightly darker background for profile */
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px; /* Add spacing below the profile section */
+    }
+    .profile p {
+      color: #aaa; /* Light gray text */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #444; /* Dark border */
+      padding: 8px;
+      text-align: left;
+      color: #ffffff; /* White text */
+    }
+    th {
+      background-color: #2c2c2c; /* Dark header background */
+    }
+    .btn-custom {
+      background-color: #00bcd4; /* Cyan accent color */
+      border: none;
+      color: #121212;
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-size: 1.1em; /* Larger font size for buttons */
+      transition: background-color 0.3s ease;
+      width: 100%; /* Full width for buttons */
+    }
+    .btn-custom:hover {
+      background-color: #0097a7; /* Darker cyan on hover */
+    }
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .profile-row p {
+      flex: 1;
+      margin: 0;
+    }
+    .gpa {
+      font-size: 1.5em;
+      font-weight: bold;
+      text-align: center;
+      color: #00bcd4; /* Cyan accent color */
+    }
+    .section {
+      margin-bottom: 30px; /* Add spacing between sections */
+    }
+    h3 a {
+      color: #00bcd4; /* Cyan accent color */
+      text-decoration: none;
+    }
+    h3 a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+      <img src="/images/NUTECH_logo.png" alt="NUTECH Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/student/notification"><i class="fas fa-bell"></i> Notifications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/student/profile/update"><i class="fas fa-user-circle"></i> Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Dashboard Content -->
+  <div class="container dashboard-container">
+    <h2>Welcome, <%= student.firstName %> <%= student.lastName %></h2>
+    <!-- Buttons Section -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <button class="btn btn-custom" onclick="location.href='/student/attendance'">View Attendance</button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-custom" onclick="location.href='/student/classes'">Scheduled Classes</button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-custom" onclick="location.href='/student/results'">Results/Grades</button>
+      </div>
+    </div>
+    <!-- Profile Section -->
+    <div class="section profile">
+      <h3><i class="fas fa-user"></i> Profile</h3>
+      <!-- Row 1: Student ID and Name -->
+      <div class="profile-row">
+        <p><strong>Student ID:</strong> <%= student.studentId %></p>
+        <p><strong>Name:</strong> <%= student.firstName %> <%= student.lastName %></p>
+      </div>
+      <!-- Row 2: Email and Phone -->
+      <div class="profile-row">
+        <p><strong>Email:</strong> <%= student.email %></p>
+        <p><strong>Phone:</strong> <%= student.phone || 'Not provided' %></p>
+      </div>
+      <!-- Row 3: Address and Batch -->
+      <div class="profile-row">
+        <p><strong>Address:</strong> <%= student.address || 'Not provided' %></p>
+        <p><strong>Batch:</strong> <%= student.batch %></p>
+      </div>
+      <!-- Row 4: Department and Semester -->
+      <div class="profile-row">
+        <p><strong>Department:</strong> <%= student.department %></p>
+        <p><strong>Semester:</strong> <%= student.semester %></p>
+      </div>
+    </div>
+    <!-- Enrolled Classes Section -->
+    <div class="section">
+      <h3><a href="/student/classes"><i class="fas fa-book"></i> Enrolled Classes</a></h3>
+      <% if (enrolledClasses.length > 0) { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Class Name</th>
+              <th>Instructor</th>
+              <th>Schedule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% enrolledClasses.slice(0, 7).forEach(cls => { %>
+              <tr>
+                <td><%= cls.className %></td>
+                <td><%= cls.teacher %></td>
+                <td><%= cls.schedule %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>No classes enrolled yet.</p>
+      <% } %>
+    </div>
+    <!-- Attendance Section -->
+    <div class="section">
+      <h3><a href="/student/attendance"><i class="fas fa-calendar-check"></i> Attendance</a></h3>
+      <% if (attendance.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Class Name</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% attendance.slice(0, 7).forEach(record => { %>
+              <tr>
+                <td><%= record.class?.className || "N/A" %></td>
+                <td><%= record.date.toDateString() %></td>
+                <td><%= record.status %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>No attendance records found.</p>
+      <% } %>
+    </div>
+    <!-- Exam Results Section -->
+    <div class="section">
+      <h3><a href="/student/results"><i class="fas fa-chart-bar"></i> Exam Results</a></h3>
+      <% if (results.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Marks</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results.slice(0, 7).forEach(result => { %>
+              <tr>
+                <td><%= result.class?.className || "N/A" %></td>
+                <td><%= result.marks %></td>
+                <td><%= result.grade %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>No results available yet.</p>
+      <% } %>
+    </div>
+    <!-- GPA Section -->
+    <div class="gpa">
+      <h3>CGPA: <%= gpa %></h3>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Confirm logout
+    function confirmLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        window.location.href = "/student/logout";
+      }
+    }
+  </script>
+</body>
+</html>

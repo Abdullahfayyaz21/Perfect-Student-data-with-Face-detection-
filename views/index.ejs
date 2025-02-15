@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Face Detection</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom Styles for Dark Theme -->
+  <style>
+    body {
+      background-color: #121212; /* Dark background */
+      color: #ffffff; /* White text */
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #1e1e1e; /* Slightly lighter dark background */
+      border-bottom: 1px solid #333;
+    }
+    .navbar-brand img {
+      width: 40px; /* Adjust logo size */
+      height: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #ffffff !important; /* White text */
+    }
+    .navbar-nav .nav-link:hover {
+      color: #00bcd4 !important; /* Cyan accent on hover */
+    }
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .intro {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .intro h2 {
+      color: #00bcd4; /* Cyan accent color */
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    .intro p {
+      font-size: 1.2rem;
+      color: #aaa; /* Light gray text */
+    }
+    .camera-container {
+      background-color: #1e1e1e; /* Dark container background */
+      border: 1px solid #333;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle glow effect */
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    .camera-container h3 {
+      color: #00bcd4; /* Cyan accent color */
+      margin-bottom: 1rem;
+    }
+    video {
+      display: block;
+      width: 100%;
+      max-height: 300px;
+      margin-top: 1rem;
+      border: 2px solid #00bcd4; /* Cyan accent border */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      background-color: #1e1e1e; /* Dark background */
+      padding: 1rem 0;
+      font-size: 0.9rem;
+      color: #aaa; /* Light gray text */
+      border-top: 1px solid #333;
+    }
+    canvas {
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+      <img src="/images/NUTECH_logo.png" alt="NUTECH Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/student/login"><i class="fas fa-user-graduate"></i> Student Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/login"><i class="fas fa-user-shield"></i> Admin Login</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Main Content -->
+  <main>
+    <section class="intro">
+      <h2>Welcome to the Recognition System</h2>
+      <p>
+        Authenticate your identity using advanced facial recognition. Use the
+        live camera feature to proceed.
+      </p>
+    </section>
+    <div class="camera-container">
+      <h3>Live Camera Recognition</h3>
+      <video id="video" width="720" height="560" autoplay muted></video>
+    </div>
+  </main>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Student Recognition System. All rights reserved.</p>
+  </footer>
+  <!-- Scripts -->
+  <script defer src="/scripts/face-api.min.js"></script>
+  <script defer src="/scripts/script.js"></script>
+</body>
+</html>

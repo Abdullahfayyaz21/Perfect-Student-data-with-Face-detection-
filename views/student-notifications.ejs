@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Notifications</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom Styles for Dark Theme -->
+  <style>
+    body {
+      background-color: #121212; /* Dark background */
+      color: #ffffff; /* White text */
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #1e1e1e; /* Slightly lighter dark background */
+      border-bottom: 1px solid #333;
+    }
+    .navbar-brand img {
+      width: 40px; /* Adjust logo size */
+      height: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #ffffff !important; /* White text */
+    }
+    .navbar-nav .nav-link:hover {
+      color: #00bcd4 !important; /* Cyan accent on hover */
+    }
+    .dashboard-container {
+      background-color: #1e1e1e; /* Dark container background */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle glow effect */
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    h2, h3 {
+      color: #00bcd4; /* Cyan accent color */
+    }
+    .notification-item {
+      background-color: #2c2c2c; /* Darker background for notifications */
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .notification-item.unread {
+      background-color: #3a3a3a; /* Highlight unread notifications */
+    }
+    .notification-message {
+      color: #ffffff;
+      font-size: 1em;
+    }
+    .notification-timestamp {
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    .no-notifications {
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+      <img src="/images/NUTECH_logo.png" alt="NUTECH Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/student/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/student/profile/update"><i class="fas fa-user-circle"></i> Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Student Notifications Content -->
+  <div class="container dashboard-container">
+    <h2>Notifications</h2>
+
+    <!-- Notifications List -->
+    <% if (notifications.length > 0) { %>
+      <% notifications.forEach(notification => { %>
+        <div class="notification-item <%= notification.isRead ? '' : 'unread' %>">
+          <div class="notification-message">
+            <%= notification.message %>
+          </div>
+          <div class="notification-timestamp">
+            <%= notification.timestamp.toLocaleString() %>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p class="no-notifications">No notifications available.</p>
+    <% } %>
+  </div>
+
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Confirm logout
+    function confirmLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        window.location.href = "/student/logout";
+      }
+    }
+  </script>
+</body>
+</html>

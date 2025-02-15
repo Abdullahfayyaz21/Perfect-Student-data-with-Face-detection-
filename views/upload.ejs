@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Face Descriptor Extractor - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .descriptor-textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+    .copy-btn {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/students">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/classes">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance">
+                <i class="fa fa-calendar-check"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/results">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/reports">
+                <i class="fa fa-file-alt"></i> Reports
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/settings">
+                <i class="fa fa-cog"></i> Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Face Descriptor Extractor</h1>
+        </div>
+        <!-- Face Descriptor Extractor Form -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Extract Descriptors</h5>
+            <p class="card-text">Upload images to extract face descriptors.</p>
+            <form id="extractForm" enctype="multipart/form-data" class="needs-validation" novalidate>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="image1">Image 1</label>
+                  <input type="file" class="form-control-file" id="image1" name="image1" accept="image/*" required>
+                  <img id="preview1" alt="Preview Image 1" style="max-width: 100%; margin-top: 10px;" />
+                  <textarea id="descriptor1" class="descriptor-textarea" readonly>Descriptor 1: Waiting for image...</textarea>
+                  <button type="button" class="btn btn-secondary copy-btn" onclick="copyToClipboard('descriptor1')">Copy Descriptor</button>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="image2">Image 2</label>
+                  <input type="file" class="form-control-file" id="image2" name="image2" accept="image/*" required>
+                  <img id="preview2" alt="Preview Image 2" style="max-width: 100%; margin-top: 10px;" />
+                  <textarea id="descriptor2" class="descriptor-textarea" readonly>Descriptor 2: Waiting for image...</textarea>
+                  <button type="button" class="btn btn-secondary copy-btn" onclick="copyToClipboard('descriptor2')">Copy Descriptor</button>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="image3">Image 3</label>
+                  <input type="file" class="form-control-file" id="image3" name="image3" accept="image/*" required>
+                  <img id="preview3" alt="Preview Image 3" style="max-width: 100%; margin-top: 10px;" />
+                  <textarea id="descriptor3" class="descriptor-textarea" readonly>Descriptor 3: Waiting for image...</textarea>
+                  <button type="button" class="btn btn-secondary copy-btn" onclick="copyToClipboard('descriptor3')">Copy Descriptor</button>
+                </div>
+              </div>
+              <button type="button" id="processButton" disabled class="btn btn-primary" onclick="processImages()">Extract Descriptors</button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="/face-api.min.js"></script>
+  <script>
+    let modelsLoaded = false;
+
+    // Load face-api.js models
+    function loadModels() {
+      console.log("Loading face-api.js models...");
+      Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
+        faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+        faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      ])
+        .then(() => {
+          console.log("Models loaded successfully!");
+          modelsLoaded = true;
+          document.getElementById("processButton").disabled = false; // Enable the button
+        })
+        .catch((error) => {
+          console.error("Error loading models:", error);
+          logError("Error loading face-api models: " + error.message);
+        });
+    }
+
+    // Extract face descriptor from an image
+    async function getFaceDescriptor(imageElement, descriptorElement) {
+      try {
+        if (!imageElement.src || imageElement.src === window.location.href) {
+          document.getElementById(descriptorElement).value = "No image selected.";
+          return;
+        }
+        const detections = await faceapi
+          .detectSingleFace(imageElement)
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+        if (detections) {
+          const descriptor = Array.from(detections.descriptor); // Convert TypedArray to regular array
+          document.getElementById(descriptorElement).value = JSON.stringify(descriptor);
+        } else {
+          document.getElementById(descriptorElement).value = "No face detected. Try another image.";
+        }
+      } catch (error) {
+        logError("Error processing image: " + error.message);
+        document.getElementById(descriptorElement).value = "Error extracting descriptor.";
+      }
+    }
+
+    function previewImage(input, imgElementId, descriptorElementId) {
+  try {
+    const file = input.files[0];
+    if (!file) {
+      document.getElementById(descriptorElementId).value = "No file selected.";
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      document.getElementById(descriptorElementId).value =
+        "Invalid file format. Please upload an image.";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imgElement = document.getElementById(imgElementId);
+      if (!imgElement) {
+        console.error(`Image element with ID ${imgElementId} not found.`);
+        return;
+      }
+      imgElement.src = e.target.result; // Set the src of the image element
+      document.getElementById(descriptorElementId).value =
+        "Image loaded. Ready for processing.";
+    };
+    reader.onerror = function () {
+      logError("Error reading file.");
+      document.getElementById(descriptorElementId).value =
+        "Error reading the image file.";
+    };
+    reader.readAsDataURL(file);
+  } catch (error) {
+    logError("Error previewing image: " + error.message);
+  }
+}
+
+    // Process all images
+    function processImages() {
+      try {
+        if (!modelsLoaded) {
+          alert("Please wait for the models to load.");
+          return;
+        }
+        getFaceDescriptor(document.getElementById("preview1"), "descriptor1");
+        getFaceDescriptor(document.getElementById("preview2"), "descriptor2");
+        getFaceDescriptor(document.getElementById("preview3"), "descriptor3");
+      } catch (error) {
+        logError("Unexpected error: " + error.message);
+      }
+    }
+
+    // Log errors to the UI
+    function logError(message) {
+      console.error(message);
+      const errorLog = document.getElementById("errorLog");
+      errorLog.textContent += message + "\n";
+    }
+
+    document.getElementById("image1").addEventListener("change", function () {
+  previewImage(this, "preview1", "descriptor1");
+});
+document.getElementById("image2").addEventListener("change", function () {
+  previewImage(this, "preview2", "descriptor2");
+});
+document.getElementById("image3").addEventListener("change", function () {
+  previewImage(this, "preview3", "descriptor3");
+});
+
+    // Copy text to clipboard
+    function copyToClipboard(textareaId) {
+      const textarea = document.getElementById(textareaId);
+      textarea.select();
+      document.execCommand("copy");
+      alert("Copied to clipboard!");
+    }
+
+    // Load models on page load
+    loadModels();
+  </script>
+</body>
+</html>

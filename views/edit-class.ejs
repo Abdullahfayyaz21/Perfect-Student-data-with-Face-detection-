@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Class - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .schedule-slot {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .add-slot-btn, .remove-slot-btn {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/classes" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Edit Class</h1>
+        </div>
+        <!-- Display Error Message (if any) -->
+        <% if (error) { %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
+        <!-- Edit Class Form -->
+        <form action="/admin/classes/<%= cls._id %>/edit" method="POST">
+          <div class="form-group">
+            <label for="className">Class Name</label>
+            <input type="text" class="form-control" id="className" name="className" value="<%= cls.className %>" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" value="<%= cls.subject %>" required>
+          </div>
+          <div class="form-group">
+            <label for="teacher">Teacher</label>
+            <input type="text" class="form-control" id="teacher" name="teacher" value="<%= cls.teacher || '' %>" placeholder="Enter teacher's name">
+          </div>
+          <!-- Schedule Section -->
+          <div id="schedule-section">
+            <label>Schedule</label>
+            <div id="schedule-slots">
+              <!-- Pre-fill existing schedule slots -->
+              <% cls.schedule.forEach((slot, index) => { %>
+                <div class="schedule-slot">
+                  <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <select class="form-control" name="schedule[<%= index %>][day]" required>
+                        <option value="">Select Day</option>
+                        <option value="Monday" <%= slot.day === 'Monday' ? 'selected' : '' %>>Monday</option>
+                        <option value="Tuesday" <%= slot.day === 'Tuesday' ? 'selected' : '' %>>Tuesday</option>
+                        <option value="Wednesday" <%= slot.day === 'Wednesday' ? 'selected' : '' %>>Wednesday</option>
+                        <option value="Thursday" <%= slot.day === 'Thursday' ? 'selected' : '' %>>Thursday</option>
+                        <option value="Friday" <%= slot.day === 'Friday' ? 'selected' : '' %>>Friday</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <input type="time" class="form-control" name="schedule[<%= index %>][startTime]" value="<%= slot.startTime %>" placeholder="Start Time" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <input type="time" class="form-control" name="schedule[<%= index %>][endTime]" value="<%= slot.endTime %>" placeholder="End Time" required>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-danger remove-slot-btn" onclick="removeScheduleSlot(this)">Remove Slot</button>
+                </div>
+              <% }); %>
+            </div>
+            <button type="button" class="btn btn-secondary add-slot-btn" onclick="addScheduleSlot()">Add Another Slot</button>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    let slotIndex = <%= cls.schedule.length || 0 %>; // Tracks the number of schedule slots
+    function addScheduleSlot() {
+      const scheduleSlots = document.getElementById("schedule-slots");
+      const newSlot = document.createElement("div");
+      newSlot.classList.add("schedule-slot");
+      newSlot.innerHTML = `
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <select class="form-control" name="schedule[${slotIndex}][day]" required>
+              <option value="">Select Day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <input type="time" class="form-control" name="schedule[${slotIndex}][startTime]" placeholder="Start Time" required>
+          </div>
+          <div class="form-group col-md-4">
+            <input type="time" class="form-control" name="schedule[${slotIndex}][endTime]" placeholder="End Time" required>
+          </div>
+        </div>
+        <button type="button" class="btn btn-danger remove-slot-btn" onclick="removeScheduleSlot(this)">Remove Slot</button>
+      `;
+      scheduleSlots.appendChild(newSlot);
+      slotIndex++;
+    }
+    function removeScheduleSlot(button) {
+      const slot = button.parentElement;
+      slot.remove();
+    }
+  </script>
+</body>
+</html>

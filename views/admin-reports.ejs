@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Reports - MyProject</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto" action="/admin/reports" method="GET">
+      <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search by Name, Email, or ID" value="<%= filters.search || '' %>" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/students">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/classes">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/attendance" >
+                <i class="fa fa-calendar-check"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/results">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/reports" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-file-alt"></i> Reports
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/settings">
+                <i class="fa fa-cog"></i> Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Reports</h1>
+        </div>
+
+        <!-- FILTERS -->
+        <form action="/admin/reports" method="GET" class="mb-4">
+          <div class="row">
+            <div class="col-md-4">
+              <select name="classId" class="form-control" onchange="this.form.submit()">
+                <option value="">Filter by Class</option>
+                <% classes.forEach(cls => { %>
+                  <option value="<%= cls._id %>" <%= filters.classId === cls._id.toString() ? 'selected' : '' %>>
+                    <%= cls.className %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select name="grade" class="form-control" onchange="this.form.submit()">
+                <option value="">Filter by Grade</option>
+                <option value="A" <%= filters.grade === 'A' ? 'selected' : '' %>>A</option>
+                <option value="B" <%= filters.grade === 'B' ? 'selected' : '' %>>B</option>
+                <option value="C" <%= filters.grade === 'C' ? 'selected' : '' %>>C</option>
+                <option value="D" <%= filters.grade === 'D' ? 'selected' : '' %>>D</option>
+                <option value="F" <%= filters.grade === 'F' ? 'selected' : '' %>>F</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <!-- REPORTS TABLE -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Student Name</th>
+              <th>Class</th>
+              <th>Marks</th>
+              <th>Grade</th>
+              <th>Exam Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (results.length > 0) { %>
+              <% results.forEach(result => { %>
+                <tr>
+                  <td><%= result.student.studentId %></td>
+                  <td><%= result.student.firstName %> <%= result.student.lastName %></td>
+                  <td><%= result.class.className %></td>
+                  <td><%= result.marks %></td>
+                  <td><%= result.grade %></td>
+                  <td><%= result.examDate.toDateString() %></td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="text-center">No reports found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

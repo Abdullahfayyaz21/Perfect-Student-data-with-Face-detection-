@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Optional: Bootstrap CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/notifications">
+          <i class="fa fa-bell"></i>
+          <span class="badge badge-danger">3</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/dashboard" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/students">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/classes">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/classes/enroll">
+                <i class="fa fa-user-plus"></i> Assign Classes
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance">
+                <i class="fa fa-calendar-check"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/results">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/reports">
+                <i class="fa fa-file-alt"></i> Reports
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/settings">
+                <i class="fa fa-cog"></i> Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Dashboard</h1>
+          <p>Welcome, <%= admin.firstName %>!</p>
+        </div>
+        <!-- QUICK SUMMARY CARDS -->
+        <div class="row">
+          <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <p class="card-text"><%= totalStudents %></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Total Classes</h5>
+                <p class="card-text"><%= totalClasses %></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Pending Approvals</h5>
+                <p class="card-text"><%= pendingApprovals %></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Today’s Attendance</h5>
+                <p class="card-text"><%= todaysAttendance %>%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- QUICK ACTION BUTTONS -->
+        <div class="mb-4">
+          <a href="/admin/student-register" class="btn btn-primary">Add New Student</a>
+          <a href="/admin/classes/new" class="btn btn-secondary">Create New Class/Subject</a>
+          <a href="/admin/attendance/mark" class="btn btn-info">Mark Attendance</a>
+          <a href="/admin/classes/enroll" class="btn btn-warning">Assign Classes</a>
+          <a href="/reports/generate" class="btn btn-success">Generate Report</a>
+        </div>
+        <!-- RECENT ACTIVITY PANEL -->
+        <div class="card">
+          <div class="card-header">
+            Recent Activity
+          </div>
+          <ul class="list-group list-group-flush">
+            <% recentActivities.forEach(function(activity){ %>
+              <li class="list-group-item">
+                <%= activity %>
+              </li>
+            <% }); %>
+          </ul>
+        </div>
+        <!-- OPTIONAL: Additional Widgets such as graphs/charts can be added here -->
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

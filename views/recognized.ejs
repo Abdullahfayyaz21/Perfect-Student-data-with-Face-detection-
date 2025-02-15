@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recognized Student</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: #00bcd4;
+    }
+    p {
+      font-size: 1.2em;
+    }
+    a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #00bcd4;
+      color: #121212;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    a:hover {
+      background-color: #0097a7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Recognized Student</h1>
+  <p><strong>Name:</strong> <%= student.firstName %> <%= student.lastName %></p>
+  <p><strong>Student ID:</strong> <%= student.studentId %></p>
+  <p><strong>Email:</strong> <%= student.email %></p>
+  <p><strong>Batch:</strong> <%= student.batch %></p>
+  <p><strong>Department:</strong> <%= student.department %></p>
+  <p><strong>Semester:</strong> <%= student.semester %></p>
+
+  <a href="/student/attendance/mark?studentId=<%= student._id %>">Confirm and Mark Attendance</a>
+  <a href="/">Try Again</a>
+</body>
+</html>

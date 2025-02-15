@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Attendance</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .container {
+      margin-top: 50px;
+      text-align: center;
+    }
+    h1 {
+      color: #00bcd4;
+    }
+    p {
+      font-size: 1.2em;
+    }
+    .class-list {
+      margin-top: 20px;
+    }
+    .class-item {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .class-item button {
+      background-color: #00bcd4;
+      color: #121212;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .class-item button:hover {
+      background-color: #0097a7;
+    }
+    .error {
+      color: #ff5252;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mark Attendance</h1>
+
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } else { %>
+      <p>Select a class to mark your attendance:</p>
+      <div class="class-list">
+        <% scheduledClasses.forEach(cls => { %>
+          <div class="class-item">
+            <div>
+              <strong><%= cls.className %></strong> (<%= cls.subject %>)
+            </div>
+            <form action="/student/attendance/mark/<%= cls._id %>?studentId=<%= studentId %>" method="POST">
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

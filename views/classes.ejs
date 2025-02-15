@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Classes - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Optional: Bootstrap CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto" action="/admin/classes" method="GET">
+      <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search by Name or Subject" value="<%= filters.search || '' %>" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/students">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/classes" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance">
+                <i class="fa fa-calendar-check"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/results">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/reports">
+                <i class="fa fa-file-alt"></i> Reports
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/settings">
+                <i class="fa fa-cog"></i> Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Classes/Subjects</h1>
+        </div>
+
+        <!-- FILTERS -->
+        <form action="/admin/classes" method="GET" class="mb-4">
+          <div class="row">
+            <div class="col-md-4">
+              <select name="schedule" class="form-control" onchange="this.form.submit()">
+                <option value="">Filter by Schedule</option>
+                <option value="Mon, Wed, Fri" <%= filters.schedule === 'Mon, Wed, Fri' ? 'selected' : '' %>>Mon, Wed, Fri</option>
+                <option value="Tue, Thu" <%= filters.schedule === 'Tue, Thu' ? 'selected' : '' %>>Tue, Thu</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <!-- CLASSES TABLE -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Class Name</th>
+              <th>Subject</th>
+              <th>Schedule</th>
+              <th>Enrolled Students</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (classes.length > 0) { %>
+              <% classes.forEach(cls => { %>
+                <tr>
+                  <td><%= cls.className %></td>
+                  <td><%= cls.subject %></td>
+                  <td><%= cls.schedule || 'Not specified' %></td>
+                  <td><%= cls.students?.length || 0 %> students</td>
+                  <td>
+                    <a href="/admin/classes/<%= cls._id %>/edit" class="btn btn-sm btn-primary">Edit</a>
+                    <button class="btn btn-sm btn-danger" onclick="deleteClass('<%= cls._id %>')">Delete</button>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="5" class="text-center">No classes found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    function deleteClass(id) {
+      if (confirm("Are you sure you want to delete this class?")) {
+        fetch(`/admin/classes/${id}/delete`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              window.location.reload(); // Reload the page after successful deletion
+            } else {
+              alert("Failed to delete the class.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting class:", error);
+            alert("An error occurred while deleting the class.");
+          });
+      }
+    }
+  </script>
+</body>
+</html>

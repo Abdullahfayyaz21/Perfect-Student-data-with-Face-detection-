@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Student - Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+  </header>
+  <div class="container-fluid" style="margin-bottom: 30px;">
+    <div class="row">
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Edit Student</h1>
+        </div>
+        <!-- Edit Form -->
+        <form action="/admin/students/<%= student._id %>/update" method="POST" class="needs-validation" novalidate>
+          <!-- Personal Details -->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control" id="firstName" name="firstName" value="<%= student.firstName %>" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" id="lastName" name="lastName" value="<%= student.lastName %>" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="age">Age</label>
+              <input type="number" class="form-control" id="age" name="age" value="<%= student.age %>" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" value="<%= student.email %>" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="phone">Phone</label>
+              <input type="tel" class="form-control" id="phone" name="phone" value="<%= student.phone || '' %>" pattern="^03\d{9}$">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="address">Address</label>
+              <textarea class="form-control" id="address" name="address" rows="3"><%= student.address || '' %></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="batch">Batch</label>
+              <input type="number" class="form-control" id="batch" name="batch" value="<%= student.batch %>" min="2000" max="3000" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="semester">Semester</label>
+              <input type="number" class="form-control" id="semester" name="semester" value="<%= student.semester %>" min="1" max="8" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="department">Department</label>
+              <input type="text" class="form-control" id="department" name="department" value="<%= student.department %>" required>
+            </div>
+          </div>
+
+          <!-- Face Descriptors -->
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <h4>Face Descriptors</h4>
+              <p>Enter face descriptors for exactly 3 pictures.</p>
+              <% student.faceDescriptors.forEach((descriptor, index) => { %>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="faceDescriptors[<%= index %>][0]">Descriptor 1</label>
+                    <input type="text" class="form-control" id="faceDescriptors[<%= index %>][0]" name="faceDescriptors[<%= index %>]" value="<%= JSON.stringify(descriptor) %>" required>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Update Student</button>
+        </form>
+        <div class="mt-4 text-center">
+          <p>Don't have face descriptors? Extract them now.</p>
+          <a href="/extractDescriptors" target="_blank" class="btn btn-secondary">Extract Face Descriptors</a>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

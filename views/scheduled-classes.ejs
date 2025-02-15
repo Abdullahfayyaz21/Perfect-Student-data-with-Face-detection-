@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduled Classes</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom Styles for Dark Theme -->
+  <style>
+    body {
+      background-color: #121212; /* Dark background */
+      color: #ffffff; /* White text */
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #1e1e1e; /* Slightly lighter dark background */
+      border-bottom: 1px solid #333;
+    }
+    .navbar-brand img {
+      width: 40px; /* Adjust logo size */
+      height: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #ffffff !important; /* White text */
+    }
+    .navbar-nav .nav-link:hover {
+      color: #00bcd4 !important; /* Cyan accent on hover */
+    }
+    .dashboard-container {
+      background-color: #1e1e1e; /* Dark container background */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle glow effect */
+      margin: 20px auto;
+      max-width: 1200px;
+    }
+    h2, h3 {
+      color: #00bcd4; /* Cyan accent color */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #444; /* Dark border */
+      padding: 8px;
+      text-align: left;
+      color: #ffffff; /* White text */
+    }
+    th {
+      background-color: #2c2c2c; /* Dark header background */
+    }
+    .btn-custom {
+      background-color: #00bcd4; /* Cyan accent color */
+      border: none;
+      color: #121212;
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-size: 1.1em; /* Larger font size for buttons */
+      transition: background-color 0.3s ease;
+      width: 100%; /* Full width for buttons */
+    }
+    .btn-custom:hover {
+      background-color: #0097a7; /* Darker cyan on hover */
+    }
+    .section {
+      margin-bottom: 30px; /* Add spacing between sections */
+    }
+    .form-inline {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+      <img src="/images/NUTECH_logo.png" alt="NUTECH Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/student/notification"><i class="fas fa-bell"></i> Notifications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/student/profile/update"><i class="fas fa-user-circle"></i> Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Scheduled Classes Content -->
+  <div class="container dashboard-container">
+    <h2>Scheduled Classes</h2>
+
+    <!-- Buttons Section -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <button class="btn btn-custom" onclick="location.href='/student/dashboard'">Back to Dashboard</button>
+      </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="section">
+      <form class="form-inline" action="/student/classes" method="GET">
+        <!-- Search Bar -->
+        <input
+          class="form-control"
+          type="search"
+          name="search"
+          placeholder="Search by Class Name or Instructor"
+          value="<%= filters.search || '' %>"
+        />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+
+    <!-- Scheduled Classes Table -->
+<div class="section">
+  <h3><i class="fas fa-book"></i> Enrolled Classes</h3>
+  <% if (enrolledClasses.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Class Name</th>
+          <th>Instructor</th>
+          <th>Schedule</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% enrolledClasses.forEach(cls => { %>
+          <tr>
+            <td><%= cls.className %></td>
+            <td><%= cls.teacher || "Not assigned" %></td>
+            <td><%= cls.schedule %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No classes enrolled yet.</p>
+  <% } %>
+</div>
+
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Confirm logout
+    function confirmLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        window.location.href = "/student/logout";
+      }
+    }
+  </script>
+</body>
+</html>

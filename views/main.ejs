@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICAT</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom Styles for Dark Theme -->
+  <style>
+    body {
+      background-color: #121212; /* Dark background */
+      color: #ffffff; /* White text */
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #1e1e1e; /* Slightly lighter dark background */
+      border-bottom: 1px solid #333;
+    }
+    .navbar-brand img {
+      width: 40px; /* Adjust logo size */
+      height: auto;
+    }
+    .navbar-nav .nav-link {
+      color: #ffffff !important; /* White text */
+    }
+    .navbar-nav .nav-link:hover {
+      color: #00bcd4 !important; /* Cyan accent on hover */
+    }
+    .main-container {
+      background-color: #1e1e1e; /* Dark container background */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle glow effect */
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    h1 {
+      color: #00bcd4; /* Cyan accent color */
+      font-size: 2em;
+      margin-top: 20px;
+    }
+    .attendance-button {
+      background-color: #00bcd4; /* Cyan accent color */
+      border: none;
+      color: #121212; /* Dark text for contrast */
+      padding: 20px 40px;
+      font-size: 1.5em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      margin-top: 30px;
+      display: inline-block;
+    }
+    .attendance-button:hover {
+      background-color: #0097a7; /* Darker cyan on hover */
+      transform: scale(1.05); /* Slightly enlarge the button */
+    }
+    .attendance-button i {
+      margin-right: 10px; /* Add spacing between icon and text */
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">
+      <img src="/images/NUTECH_logo.png" alt="NUTECH Logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/student/login"><i class="fas fa-user-graduate"></i> Student Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/login"><i class="fas fa-user-shield"></i> Admin Login</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container main-container">
+    <h1>Welcome to the Student Recognition System</h1>
+    <p>This system allows students and admins to manage attendance, view results, and more.</p>
+
+    <!-- Big Button for Face Detection Attendance -->
+    <a href="/" class="attendance-button">
+      <i class="fas fa-camera"></i> Mark Attendance via Face Detection
+    </a>
+  </div>
+
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

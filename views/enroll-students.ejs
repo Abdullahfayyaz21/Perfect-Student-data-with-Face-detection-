@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Enroll Students - Admin Dashboard</title>
+    <!-- Link to your CSS or Bootstrap -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+      <form class="form-inline my-2 my-lg-0 ml-auto">
+        <input
+          class="form-control mr-sm-2"
+          type="search"
+          placeholder="Search..."
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          Search
+        </button>
+      </form>
+      <ul class="navbar-nav ml-3">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-toggle="dropdown"
+          >
+            <img
+              src="/images/NUTECH_logo.png"
+              alt="Admin Avatar"
+              class="rounded-circle"
+              width="30"
+            />
+            Admin
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="/admin/profile">Profile</a>
+            <a class="dropdown-item" href="/admin/settings">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/admin/logout">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/dashboard">
+                  <i class="fa fa-home"></i> Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  href="/admin/classes/enroll"
+                  style="
+                    background-color: rgba(0, 68, 255, 0.1);
+                    border-radius: 5px;
+                  "
+                >
+                  <i class="fa fa-users"></i> Enroll Students
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <!-- MAIN CONTENT -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Enroll Students in Class</h1>
+          </div>
+
+          <!-- Display Success Message (if any) -->
+          <% if (success && success.toString() === 'true') { %>
+          <div class="alert alert-success" role="alert">
+            Action completed successfully!
+          </div>
+          <% } %>
+
+          <!-- Display Error Message (if any) -->
+          <% if (error) { %>
+          <div class="alert alert-danger" role="alert"><%= error %></div>
+          <% } %>
+
+          <!-- Enroll Student Form -->
+          <form action="/admin/classes/enroll" method="POST" class="mb-4">
+            <div class="form-group">
+              <label for="classId">Select Class</label>
+              <select class="form-control" id="classId" name="classId" required>
+                <option value="">-- Select a Class --</option>
+                <% classes.forEach(cls => { %>
+                <option value="<%= cls._id %>"><%= cls.className %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="studentId">Select Student</label>
+              <select
+                class="form-control"
+                id="studentId"
+                name="studentId"
+                required
+              >
+                <option value="">-- Select a Student --</option>
+                <% students.forEach(student => { %>
+                <option value="<%= student._id %>">
+                  <%= student.firstName %> <%= student.lastName %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Enroll Student
+            </button>
+          </form>
+
+          <!-- Remove Student Form -->
+          <form action="/admin/classes/remove-student" method="POST">
+            <div class="form-group">
+              <label for="classIdRemove">Select Class</label>
+              <select
+                class="form-control"
+                id="classIdRemove"
+                name="classId"
+                required
+              >
+                <option value="">-- Select a Class --</option>
+                <% classes.forEach(cls => { %>
+                <option value="<%= cls._id %>"><%= cls.className %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="studentIdRemove">Select Student</label>
+              <select
+                class="form-control"
+                id="studentIdRemove"
+                name="studentId"
+                required
+              >
+                <option value="">-- Select a Student --</option>
+                <% students.forEach(student => { %>
+                <option value="<%= student._id %>">
+                  <%= student.firstName %> <%= student.lastName %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-danger">Remove Student</button>
+          </form>
+        </main>
+      </div>
+    </div>
+    <!-- Optional: Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

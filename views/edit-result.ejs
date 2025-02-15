@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Result - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/results" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Edit Result</h1>
+        </div>
+
+        <!-- Display Error Message (if any) -->
+        <% if (error) { %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
+
+        <!-- Edit Result Form -->
+        <form action="/admin/results/<%= result._id %>/edit" method="POST">
+          <div class="form-group">
+            <label for="studentId">Select Student</label>
+            <select class="form-control" id="studentId" name="studentId" required>
+              <% students.forEach(student => { %>
+                <option value="<%= student._id %>" <%= result.student._id.toString() === student._id.toString() ? 'selected' : '' %>>
+                  <%= student.firstName %> <%= student.lastName %> (<%= student.studentId %>)
+                </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="classId">Select Class</label>
+            <select class="form-control" id="classId" name="classId" required>
+              <% classes.forEach(cls => { %>
+                <option value="<%= cls._id %>" <%= result.class._id.toString() === cls._id.toString() ? 'selected' : '' %>>
+                  <%= cls.className %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="marks">Marks</label>
+            <input type="number" class="form-control" id="marks" name="marks" value="<%= result.marks %>" min="0" max="100" required>
+          </div>
+          <div class="form-group">
+            <label for="grade">Grade</label>
+            <select class="form-control" id="grade" name="grade" required>
+              <option value="A" <%= result.grade === 'A' ? 'selected' : '' %>>A</option>
+              <option value="B" <%= result.grade === 'B' ? 'selected' : '' %>>B</option>
+              <option value="C" <%= result.grade === 'C' ? 'selected' : '' %>>C</option>
+              <option value="D" <%= result.grade === 'D' ? 'selected' : '' %>>D</option>
+              <option value="F" <%= result.grade === 'F' ? 'selected' : '' %>>F</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

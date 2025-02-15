@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Already Marked</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: #ff9800;
+    }
+    p {
+      font-size: 1.2em;
+    }
+    a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #ff9800;
+      color: #121212;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    a:hover {
+      background-color: #e65100;
+    }
+  </style>
+</head>
+<body>
+  <h1>Attendance Already Marked</h1>
+  <p><strong>Student Name:</strong> <%= student.firstName %> <%= student.lastName %></p>
+  <p><strong>Student ID:</strong> <%= student.studentId %></p>
+  <p><strong>Date:</strong> <%= currentDate %></p>
+  <p><strong>Status:</strong> Student attendance for this class has already been marked for today.</p>
+
+  <!-- Buttons -->
+  <a href="/">Return to Home</a>
+  <a href="/student/attendance/mark/<%= classId %>?studentId=<%= student._id %>">Mark Attendance for Another Class</a>
+</body>
+</html>

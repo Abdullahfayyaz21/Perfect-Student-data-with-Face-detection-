@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Student - Admin Dashboard</title>
+  <!-- Link to your CSS or Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Optional: Bootstrap CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item">
+        <a class="nav-link" href="/notifications">
+          <i class="fa fa-bell"></i>
+          <span class="badge badge-danger">3</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/students" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/classes">
+                <i class="fa fa-book"></i> Classes/Subjects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/attendance">
+                <i class="fa fa-calendar-check"></i> Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/results">
+                <i class="fa fa-chart-bar"></i> Results
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/reports">
+                <i class="fa fa-file-alt"></i> Reports
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/settings">
+                <i class="fa fa-cog"></i> Settings
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="margin-bottom: 30px;">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Register New Student</h1>
+        </div>
+        <!-- Display Error Message (if any) -->
+        <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+        <% } %>
+        <!-- Registration Form -->
+        <form action="/admin/student-register" method="POST" class="needs-validation" novalidate>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="studentId">Student ID</label>
+              <input type="text" class="form-control" id="studentId" name="studentId" required placeholder="Enter unique student ID">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control" id="firstName" name="firstName" required placeholder="Enter first name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" id="lastName" name="lastName" required placeholder="Enter last name">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="age">Age</label>
+              <input type="number" class="form-control" id="age" name="age" required placeholder="Enter age">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required placeholder="Enter email">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required placeholder="Enter password">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="phone">Phone</label>
+              <input type="tel" class="form-control" id="phone" name="phone" pattern="^03\d{9}$" required placeholder="Enter phone number (03xxxxxxxxx)">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="address">Address</label>
+              <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter address"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="batch">Batch</label>
+              <input type="number" class="form-control" id="batch" name="batch" min="2000" max="3000" value="2024" required placeholder="Enter batch year (e.g., 2024)">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="semester">Semester</label>
+              <input type="number" class="form-control" id="semester" name="semester" min="1" max="8" value="1" required placeholder="Enter semester (1-8)">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="department">Department</label>
+              <input type="text" class="form-control" id="department" name="department" required placeholder="Enter department (e.g., Software Engineering)">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="faceDescriptor1">Face Descriptor 1 (JSON Array)</label>
+              <textarea class="form-control" id="faceDescriptor1" name="faceDescriptor1" required placeholder="[...]"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="faceDescriptor2">Face Descriptor 2 (JSON Array)</label>
+              <textarea class="form-control" id="faceDescriptor2" name="faceDescriptor2" required placeholder="[...]"></textarea>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="faceDescriptor3">Face Descriptor 3 (JSON Array)</label>
+              <textarea class="form-control" id="faceDescriptor3" name="faceDescriptor3" required placeholder="[...]"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Register Student</button>
+        </form>
+        <!-- Extract Descriptors Button -->
+        <div class="mt-4 text-center">
+          <p>Don't have face descriptors? Extract them now.</p>
+          <a href="/extractDescriptors" target="_blank" class="btn btn-secondary">Extract Face Descriptors</a>
+        </div>
+      </main>
+    </div>
+  </div>
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
